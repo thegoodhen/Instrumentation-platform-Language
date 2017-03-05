@@ -9,9 +9,10 @@ package shuntingyard;
  *
  * @author thegoodhen
  */
-public class EndFunctionLineToken extends LineToken{
+public class EndFunctionLineToken extends LineToken implements IRunnableToken{
 	private FunctionDeclarationLineToken fdlt=null;
 	private JumpTargetByteCodeToken jtbct;
+	private boolean extendedArgumentCount = false;//whether the number of arguments of the function this endfunction statement belong to is over 255 (more than 1 byte)
 
 	public EndFunctionLineToken(String s) {
 		super(s);
@@ -50,6 +51,7 @@ public class EndFunctionLineToken extends LineToken{
 
 	public void compile(Compiler c)//TODO: stub
 	{
+	    c.getByteCode().push(this);
 		c.setCurrentFunction(null);
 		//TODO: maybe push RETURN here? 
 		//c.getByteCode().push(this.getJumpTarget());
@@ -59,5 +61,30 @@ public class EndFunctionLineToken extends LineToken{
 	{
 		this.fdlt=fdlt;
 	}
+
+    @Override
+    public void run(VirtualMachine vm) {
+	//do nothing
+    }
+
+    @Override
+    public boolean isExtended() {
+	return this.extendedArgumentCount;
+    }
+
+    @Override
+    public void setExtended(boolean ex) {
+	this.extendedArgumentCount=ex;
+    }
+
+    @Override
+    public byte getBaseCode() {
+	return 120;//the baseCode of NoOperationByteCodeToken
+    }
+
+    @Override
+    public byte getCode() {
+	return this.getBaseCode();
+    }
 	
 }

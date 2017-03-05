@@ -75,7 +75,7 @@ public class FunctionDeclarationLineToken extends LineToken {
 			ft.processingParameters=false;
 		}
 
-//And now we try matching the ENDIF
+//And now we try matching the ENDFUNCTION
 		int lineNumber = c.getLines().indexOf(this);
 
 		for (int i = lineNumber + 1; i < c.getLines().size(); i++) {
