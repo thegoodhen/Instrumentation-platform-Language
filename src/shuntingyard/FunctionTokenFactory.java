@@ -58,7 +58,7 @@ public class FunctionTokenFactory extends DelegatingFactory{
 		
 
 	@Override
-	public Token create(String tokenString, int position)
+	public Token create(String tokenString, int position) throws CompilerException
 	{
 		Pattern p=Pattern.compile("([A-Za-z][A-Za-z0-9]*)\\(",0);
 		//Pattern p=Pattern.compile("(.*?)\\s*\\r?\\n");

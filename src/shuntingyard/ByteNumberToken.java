@@ -38,18 +38,45 @@ public class ByteNumberToken extends NumberToken {
 	}
 
 	@Override
-	public void compileCastTo(NumberToken nt, int stackPos, Compiler c) throws RuntimeException {
+	public int compileCastTo(NumberToken nt, int stackPos, Compiler c) throws RuntimeException {
+	    int addedBytes=0;
 		if (!isImplicitlyCastableTo(nt)) {
 			throw new RuntimeException();
 		} else if (nt instanceof IntegerNumberToken) {
-			compileNumber(stackPos, c);
+
+			if(compileNumber(stackPos, c))
+			{
+			    addedBytes=2;
+			}
+			else
+			{
+			    addedBytes=1;
+			}
 			c.getByteCode().push(new CastByteToIntegerByteCodeToken());
 		} else if (nt instanceof FloatNumberToken) {
-			compileNumber(stackPos, c);
+
+			//compileNumber(stackPos, c);
+			if(compileNumber(stackPos, c))
+			{
+			    addedBytes+=2;
+			}
+			else
+			{
+			    addedBytes+=1;
+			}
 			c.getByteCode().push(new CastByteToIntegerByteCodeToken());
-			compileNumber(stackPos+1, c);
+			if(compileNumber(stackPos+1, c))
+			{
+			    addedBytes+=2;
+			}
+			else
+			{
+			    addedBytes+=1;
+			}
+			//compileNumber(stackPos+1, c);
 			c.getByteCode().push(new CastIntegerToFloatByteCodeToken());
 		}
+		return addedBytes;
 	}
 
 	@Override

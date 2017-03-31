@@ -35,9 +35,9 @@ public class AbstractParser {
 	 * Let user know that an error happened during parsing.
 	 * @param tokenNumber the index of the Token the error occured on.
 	 */
-	public void parsingError(int tokenNumber) {
+	public void parsingError(int tokenNumber) throws CompilerException{
 
-		System.err.println("Unknown token: "+tokenNumber+" Parser exiting!");
+	    throw new CompilerException("Unknown token: "+tokenNumber+" Parser exiting!");
 	}
 
 	/**
@@ -55,8 +55,9 @@ public class AbstractParser {
 	 *
 	 * @param s the String to generate an arrayList of tokens from
 	 * @return ArrayList of Tokens, generated from the input String
+     * @throws shuntingyard.CompilerException on unknown token
 	 */
-	public ArrayList<Token> Tokenize(String s) {
+	public ArrayList<Token> Tokenize(String s) throws CompilerException{
 		//System.out.println(startsWithRegex(s,"[+-/*//><=]"));
 		//System.out.println(getTokenEnd(s,"[+-/*//><=]",0));
 		//System.out.println(getTokenEnd(s,"([A-Za-z][A-Za-z0-9]*).*",0));

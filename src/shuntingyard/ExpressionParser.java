@@ -52,7 +52,7 @@ public class ExpressionParser extends AbstractParser{
 		return this.availableTokenMap;
 	}
 
-	public ArrayList<Token> Tokenize(String s) {
+	public ArrayList<Token> Tokenize(String s) throws CompilerException{
 		s=stripSpaces(s);
 		return super.Tokenize(s);
 	}
@@ -95,7 +95,7 @@ public class ExpressionParser extends AbstractParser{
 	 * @param infixTokenList
 	 * @return
 	 */
-	public ArrayList<Token> getRPN(ArrayList<Token> infixTokenList) {
+	public ArrayList<Token> getRPN(ArrayList<Token> infixTokenList) throws CompilerException {
 		ArrayList<Token> returnQueue = new ArrayList<>();
 		LinkedList<Token> theStack = new LinkedList<>();
 		for (Token t : infixTokenList) {
@@ -108,7 +108,7 @@ public class ExpressionParser extends AbstractParser{
 					if (theStack.peek() != null) {
 						returnQueue.add(theStack.pop());
 					} else {
-						System.err.println("Misplaced argument separator or mussing left parenthesis '(' in input");
+						throw new CompilerException("Misplaced argument separator or mussing left parenthesis '(' in input");
 					}
 				}
 			} else if (t instanceof OperatorToken) {
@@ -131,7 +131,7 @@ public class ExpressionParser extends AbstractParser{
 					if (theStack.peek() != null) {
 						returnQueue.add(theStack.pop());
 					} else {
-						System.err.println("Missing right parenthesis ')' in input");
+						throw new CompilerException("Missing right parenthesis ')' in input");
 					}
 				}
 				theStack.pop();//discard the LEFTBRACKET
@@ -144,7 +144,7 @@ public class ExpressionParser extends AbstractParser{
 		while (theStack.peek() != null) {
 			Token t2 = theStack.pop();
 			if (t2 instanceof LeftBracketToken || t2 instanceof RightBracketToken) {
-				System.err.println("Unexpected token! Maybe unclosed parenthesis?");
+				throw new CompilerException("Unexpected token! Maybe unclosed parenthesis?");
 			} else {
 				returnQueue.add(t2);
 			}
@@ -180,7 +180,7 @@ public class ExpressionParser extends AbstractParser{
 	 * @param s the String to construct the Expression from
 	 * @return an initialized Expression object
 	 */
-	public Expression createExpression(String s) {
+	public Expression createExpression(String s) throws CompilerException{
 		ArrayList<Token> theList = this.Tokenize(s);
 		theList = this.getRPN(theList);
 		return new Expression(theList);

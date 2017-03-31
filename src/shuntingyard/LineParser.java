@@ -18,9 +18,9 @@ import java.util.ArrayList;
 public class LineParser extends AbstractParser {
 
 	@Override
-	public void parsingError(int tokenNumber) {
+	public void parsingError(int tokenNumber) throws CompilerException {
 
-		System.err.println("Syntax error on line: "+(tokenNumber+1)+"! Parser exiting!");
+		throw new CompilerException("Syntax error on line: "+(tokenNumber+1)+"! Parser exiting!");
 	}
 
 	public LineParser() {

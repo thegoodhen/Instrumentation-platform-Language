@@ -33,13 +33,17 @@ public class HelpByteMethods {
 
 	public static byte[] getFloatBytes(float val) {
 
+	    /*
 		int bits = Float.floatToIntBits(val);
 		byte[] bytes = new byte[4];
 		for (int i = 0; i < 4; i++) {
 
 			bytes[i] = (byte) ((bits >> i * 8) & 0xff);
 		}
-		return bytes;
+		    */
+		byte[] b = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putFloat(val).array(); 
+		return b;//bytes;
+		//return bytes;
 	}
 
 }

@@ -13,7 +13,7 @@ public class FunctionDeclarationLineTokenFactory extends TokenFactory {
 
 	@Override
 	public String getRegex() {
-		return "^(void|byte|int)\\s+([A-Za-z][A-Za-z0-9]*)\\((.*)\\)";
+		return "^(void|byte|int)\\s+([A-Za-z][A-Za-z_0-9]*)\\((.*)\\)";//TODO: ...the hell? we... we aren't supporting floats? look into this!!
 	}
 
 	@Override

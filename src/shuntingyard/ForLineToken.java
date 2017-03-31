@@ -40,7 +40,7 @@ public class ForLineToken extends LineToken {
 		return this.jtbct;
 	}
 
-	public void prepare(Compiler c) {
+	public void prepare(Compiler c) throws CompilerException {
 
 		Pattern pattern = Pattern.compile(this.getRegex());
 		Matcher matcher = pattern.matcher(this.getTokenString());
@@ -69,17 +69,17 @@ public class ForLineToken extends LineToken {
 
 		}
 		if (nextToken == null) {
-			System.err.println("Attempt to find a matching NEXT failed; Reached end of code while parsing.");
+			throw new CompilerException("Attempt to find a matching NEXT failed; Reached end of code while parsing.");
 		}
 	}
 
-	public void precompile(Compiler c) {
+	public void precompile(Compiler c) throws CompilerException {
 		//ex1 = c.getExpressionParser().createExpression(expression1String);
 		VariableAssignmentLineTokenFactory valtf=new VariableAssignmentLineTokenFactory();
 		ex1=(VariableAssignmentLineToken)valtf.create(expression1String+";", 0);
 		if(ex1==null)
 		{
-			System.err.println("Error! First expression in FOR statement is supposed to be a variable assignment!");
+			throw new CompilerException("Error! First expression in FOR statement is supposed to be a variable assignment!");
 		}
 
 		ex2 = c.getExpressionParser().createExpression(expression2String);
@@ -87,11 +87,11 @@ public class ForLineToken extends LineToken {
 		ex3=(VariableAssignmentLineToken)valtf.create(expression3String+";", 0);
 		if(ex3==null)
 		{
-			System.err.println("Error! Last expression in FOR statement is supposed to be a variable assignment!");
+			throw new CompilerException("Error! Last expression in FOR statement is supposed to be a variable assignment!");
 		}
 	}
 
-	public void compile(Compiler c) {
+	public void compile(Compiler c) throws CompilerException{
 		ex1.prepare(c);
 		ex1.precompile(c);
 		ex1.compile(c);

@@ -31,7 +31,7 @@ public class Expression {
 	 * @param c
 	 * @return 
 	 */
-	public Token compile(Compiler c)
+	public Token compile(Compiler c) throws CompilerException
 	{
 
 		LinkedList<Token> theStack = new LinkedList<>();
@@ -43,7 +43,7 @@ public class Expression {
 		this.returnValue=theStack.pop();
 		if(theStack.size()>0)
 		{
-			System.err.println("Error: Too many arguments supplied to one or more functions or unary operators in the expression!");
+			throw new CompilerException("Error: Too many arguments supplied to one or more functions or unary operators in the expression!");
 		}
 		return  this.returnValue;
 	}

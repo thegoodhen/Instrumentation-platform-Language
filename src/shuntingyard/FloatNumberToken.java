@@ -48,11 +48,12 @@ public class FloatNumberToken extends NumberToken {
 	}
 
 	@Override
-	public void compileCastTo(NumberToken nt, int stackPos, Compiler c) throws RuntimeException {
+	public int compileCastTo(NumberToken nt, int stackPos, Compiler c) throws RuntimeException {
 		if(!isImplicitlyCastableTo(nt))
 		{
 			throw new RuntimeException("Cast error, lossy conversion would result.");
 		}
+		return 0;
 	}
 
 

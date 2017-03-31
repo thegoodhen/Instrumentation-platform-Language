@@ -36,7 +36,7 @@ public class VariableAssignmentLineToken extends LineToken implements IRunnableT
 		//return "^(.*?=.*?);";
 	}
 
-	public void prepare(Compiler c) {
+	public void prepare(Compiler c) throws CompilerException {
 
 		Pattern pattern = Pattern.compile(this.getRegex());
 		Matcher matcher = pattern.matcher(this.getTokenString());
@@ -50,25 +50,25 @@ public class VariableAssignmentLineToken extends LineToken implements IRunnableT
 				targetVariable = c.getGlobalVariable(variableString);
 			}
 			if (targetVariable == null) {
-				System.err.println("Attempt to assign to a variable " + variableString + ", which is unknown in the current scope!");
+				throw new CompilerException("Attempt to assign to a variable " + variableString + ", which is unknown in the current scope!");
 			}
 			expressionString = matcher.group(2);
 			if (expressionString.equals(variableString)) {
-				System.err.println("Expression assigns a variable to itself.");
+				throw new CompilerException("Expression assigns a variable to itself.");
 			}
 		}
 	}
 
-	public void precompile(Compiler c) {
+	public void precompile(Compiler c) throws CompilerException {
 		ex = c.getExpressionParser().createExpression(expressionString);
 	}
 
-	public void compile(Compiler c) {
+	public void compile(Compiler c) throws CompilerException{
 		NumberToken t = (NumberToken) ex.compile(c);//TODO: check whether this really can't throw an invalidCastException, I think it shouldn't though.
 		if (t.isImplicitlyCastableTo(targetVariable.getType())) {
 			t.compileCastTo(targetVariable.getType(), t.getNumberOfBytes() - 1, c);
 		} else {
-			System.err.println("Invalid assignment. Cannot assign an expression, result of which is " + t.getShortName() + " into " + targetVariable.getType().getShortName() + "; this might lead to a lossy conversion.");
+			throw new CompilerException("Invalid assignment. Cannot assign an expression, result of which is " + t.getShortName() + " into " + targetVariable.getType().getShortName() + "; this might lead to a lossy conversion.");
 		}
 		/*
 		 if (t instanceof IntegerNumberToken && targetVariable.getType() instanceof ByteNumberToken) {

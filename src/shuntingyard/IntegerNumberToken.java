@@ -45,10 +45,18 @@ public class IntegerNumberToken extends NumberToken {
 	}
 
 	@Override
-	public void compileCastTo(NumberToken nt, int stackPos, Compiler c) throws RuntimeException {
+	public int compileCastTo(NumberToken nt, int stackPos, Compiler c) throws RuntimeException {
+	    int returnValue=0;
 		if (isImplicitlyCastableTo(nt)) {
 			if (nt instanceof FloatNumberToken) {
-				CompilableToken.compileNumber(stackPos, c);
+				if(CompilableToken.compileNumber(stackPos, c))
+				{
+				    returnValue = 2;
+				}
+				else
+				{
+				    returnValue = 1;
+				}
 				c.getByteCode().push(new CastIntegerToFloatByteCodeToken());
 			}
 		}
@@ -56,6 +64,7 @@ public class IntegerNumberToken extends NumberToken {
 		{
 			throw new RuntimeException("Cannot cast integer to + "+nt.getClass().getSimpleName());
 		}
+		return returnValue;
 	}
 
 	@Override

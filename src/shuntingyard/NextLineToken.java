@@ -33,15 +33,15 @@ public class NextLineToken extends LineToken{
 	}
 
 
-	public void prepare(Compiler c) {
+	public void prepare(Compiler c) throws CompilerException {
 		this.jtbct=new JumpTargetByteCodeToken();
 		if(this.flt==null)
 		{
-			System.err.println("Found NEXT with no preceding FOR!");
+			throw new CompilerException("Found NEXT with no preceding FOR!");
 		}
 	}
 
-	public void compile(Compiler c)
+	public void compile(Compiler c) throws CompilerException
 	{
 		this.flt.getExpression3().prepare(c);
 		this.flt.getExpression3().precompile(c);

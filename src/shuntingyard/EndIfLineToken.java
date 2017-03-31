@@ -33,11 +33,11 @@ public class EndIfLineToken extends LineToken{
 	}
 
 
-	public void prepare(Compiler c) {
+	public void prepare(Compiler c) throws CompilerException {
 		this.jtbct=new JumpTargetByteCodeToken();
 		if(this.ilt==null)
 		{
-			System.err.println("Found ENDIF with no preceding IF!");
+			throw new CompilerException("Found ENDIF with no preceding IF!");
 		}
 	}
 

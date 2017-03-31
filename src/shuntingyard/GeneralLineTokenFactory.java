@@ -33,7 +33,7 @@ public class GeneralLineTokenFactory extends DelegatingFactory {
 	}
 
 	@Override
-	public Token create(String tokenString, int position)
+	public Token create(String tokenString, int position) throws CompilerException
 	{
 		Pattern p=Pattern.compile("(.*?)\\s*\\r?\\n");
 		Matcher m=p.matcher(tokenString);
@@ -46,9 +46,8 @@ public class GeneralLineTokenFactory extends DelegatingFactory {
 		}
 		else
 		{
-			System.err.println("Did not even find a generic line token!");
+			throw new CompilerException("Did not even find a generic line token!");
 		}
-		return null;
 	}
 
 	 

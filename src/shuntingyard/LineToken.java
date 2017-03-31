@@ -20,16 +20,16 @@ public abstract class LineToken extends Token{
 	{
 		super(s);
 	}
-	public void prepare(Compiler c)
+	public void prepare(Compiler c) throws CompilerException
 	{
 
 	}
 
-	public void precompile(Compiler c)
+	public void precompile(Compiler c) throws CompilerException
 	{
 
 	}
-	public void compile(Compiler c)
+	public void compile(Compiler c) throws CompilerException
 	{
 
 	}

@@ -19,7 +19,7 @@ public abstract class LogicalOperatorToken extends BooleanReturningOperatorToken
 
 
 	@Override
-	public void compile(LinkedList<Token> theStack, Compiler c) {
+	public void compile(LinkedList<Token> theStack, Compiler c) throws CompilerException {
 		//first we get the 2 operands off our working stack
 		Token o1=null;
 		Token o2=null;
@@ -30,10 +30,10 @@ public abstract class LogicalOperatorToken extends BooleanReturningOperatorToken
 		}
 		else
 		{
-			System.err.println("Not enough arguments to an operator: \""+this.getTokenString()+"\"");
+			throw new CompilerException("Not enough arguments to an operator: \""+this.getTokenString()+"\"");
 		}
 		if (!(o1 instanceof ByteNumberToken && o2 instanceof ByteNumberToken)) {
-			System.err.println("Expected 2 booleans (bytes) for a logical operator!; Operator" + this.getTokenString() + " cannot be applied to arguments of type" + o1.getClass().getSimpleName() + " and " + o2.getClass().getSimpleName() + "!");
+			throw new CompilerException("Expected 2 booleans (bytes) for a logical operator!; Operator" + this.getTokenString() + " cannot be applied to arguments of type" + o1.getClass().getSimpleName() + " and " + o2.getClass().getSimpleName() + "!");
 		}
 		
 		pushSelf(theStack,c);

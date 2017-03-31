@@ -36,7 +36,7 @@ public abstract class DelegatingFactory extends TokenFactory{
 	}
 
 	@Override
-	public Token create(String tokenString, int position) {
+	    public Token create(String tokenString, int position) throws CompilerException {
 		Token returnToken=null;
 		for(TokenFactory tf:subFactoriesList)
 		{

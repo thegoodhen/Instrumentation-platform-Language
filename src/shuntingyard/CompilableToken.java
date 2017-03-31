@@ -93,5 +93,5 @@ public abstract class CompilableToken extends Token {
 	 * @param theStack
 	 * @param c the compiler to give the resulting bytecode to
 	 */
-	public abstract void compile(LinkedList<Token> theStack, Compiler c);
+	public abstract void compile(LinkedList<Token> theStack, Compiler c) throws CompilerException;
 }

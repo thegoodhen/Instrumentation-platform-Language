@@ -80,7 +80,7 @@ public abstract class OperatorToken extends CompilableToken implements IRunnable
 	}
 
 	@Override
-	public void compile(LinkedList<Token> theStack, Compiler c) {
+	public void compile(LinkedList<Token> theStack, Compiler c) throws CompilerException {
 		//first we get the 2 operands off our working stack
 		Token o1=null;
 		Token o2=null;
@@ -91,11 +91,11 @@ public abstract class OperatorToken extends CompilableToken implements IRunnable
 		}
 		else
 		{
-			System.err.println("Not enough arguments to an operator: \""+this.getTokenString()+"\"");
+			throw new CompilerException("Not enough arguments to an operator: \""+this.getTokenString()+"\"");
 		}
 		//Then we make sure those are actually numbers; if not, this is not RPN!
 		if (!(o1 instanceof NumberToken && o2 instanceof NumberToken)) {
-			System.err.println("Expected numeric arguments or variables for an operator; Operator" + this.getTokenString() + " cannot be applied to arguemnts of type" + o1.getClass().getSimpleName() + " and " + o2.getClass().getSimpleName() + "!");
+			throw new CompilerException("Expected numeric arguments or variables for an operator; Operator" + this.getTokenString() + " cannot be applied to arguemnts of type" + o1.getClass().getSimpleName() + " and " + o2.getClass().getSimpleName() + "!");
 		}
 		
 		
@@ -154,9 +154,9 @@ public abstract class OperatorToken extends CompilableToken implements IRunnable
 	}
 
 	//@Override
-	public NumberToken compute(LinkedList<Token> theStack) {
+	public NumberToken compute(LinkedList<Token> theStack) throws CompilerException {
 		if (theStack.size() < getArgumentCount()) {
-			System.err.println("Not enough arguments on stack!");
+			throw new CompilerException("Not enough arguments on stack!");
 		}
 		Token t1 = theStack.pop();
 		Token t2 = theStack.pop();
@@ -169,8 +169,7 @@ public abstract class OperatorToken extends CompilableToken implements IRunnable
 			theStack.push(t3);
 			return t3;
 		}
-		System.err.println("Cannot compute operator, expected numeric arguments");
-		return null;
+		throw new CompilerException("Cannot compute operator, expected numeric arguments");
 	}
 
 	public abstract float computeBinaryOperatorFromNumbers(float a, float b);

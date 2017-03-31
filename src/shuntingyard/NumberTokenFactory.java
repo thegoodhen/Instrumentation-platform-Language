@@ -47,7 +47,7 @@ public class NumberTokenFactory extends TokenFactory {//TODO: turn this into del
 	}
 
 	@Override
-	public Token generateInstance(String tokenString) {
+	public Token generateInstance(String tokenString) throws CompilerException{
 		float value;
 		try {
 
@@ -62,9 +62,8 @@ public class NumberTokenFactory extends TokenFactory {//TODO: turn this into del
 				return new IntegerNumberToken(tokenString);//TODO: handle float too
 			}
 		} catch (Exception e) {
-			System.err.println("Factory encountered a request to create a numeric token from a string, but the given string \"" + tokenString + "\" doesn't represent a valid numeric token");
+			throw new CompilerException("Factory encountered a request to create a numeric token from a string, but the given string \"" + tokenString + "\" doesn't represent a valid numeric token");
 		}
-		return null;//new NumberToken(tokenString);
 	}
 
 }

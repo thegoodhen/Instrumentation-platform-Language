@@ -123,6 +123,24 @@ public class VirtualMachine {
 		}
 	}
 
+	public String fetchStringFromHeap(int stringAddress)
+	{
+
+		StringBuilder sb=new StringBuilder();
+		byte currentCharVal=-1;
+		int index=0;
+
+		while(currentCharVal!=0)
+		{
+			currentCharVal=(byte)(getHeap().get(stringAddress+index).getValue());
+			char currentChar=(char)currentCharVal;
+			sb.append(currentChar);
+			index++;
+			currentCharVal=(byte)(getHeap().get(stringAddress+index).getValue());
+		}
+		return sb.toString();
+	}
+
 	public int getProgramCounter()
 	{
 		return this.programCounter;
@@ -157,12 +175,12 @@ public class VirtualMachine {
 		this.programCounter+=howMuch;// -1, cause of the way we are iterating over the elements in runProgram. We jump to one before where we want to jump, and the progCounter icrements itself in runProgram.
 	}
 
-	public void setProgram(ArrayList<Token> program)
+	synchronized public void setProgram(ArrayList<Token> program)
 	{
 		this.program=program;
 	}
 
-	public void runProgram()
+	synchronized public void runProgram()
 	{
 		programStack.add(new NumericByteCodeToken((byte)0));
 		//System.out.println("Running a program!");

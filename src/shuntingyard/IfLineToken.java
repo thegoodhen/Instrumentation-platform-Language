@@ -32,7 +32,7 @@ public class IfLineToken extends LineToken {
 		return this.endToken;
 	}
 
-	public void prepare(Compiler c) {
+	public void prepare(Compiler c) throws CompilerException {
 
 		Pattern pattern = Pattern.compile(this.getRegex());
 		Matcher matcher = pattern.matcher(this.getTokenString());
@@ -63,15 +63,15 @@ public class IfLineToken extends LineToken {
 
 		}
 		if (endToken == null) {
-			System.err.println("Attempt to find a matching ENDIF failed; Reached end of code while parsing.");
+			throw new CompilerException("Attempt to find a matching ENDIF failed; Reached end of code while parsing.");
 		}
 	}
 
-	public void precompile(Compiler c) {
+	public void precompile(Compiler c) throws CompilerException {
 		ex = c.getExpressionParser().createExpression(expressionString);
 	}
 
-	public void compile(Compiler c) {
+	public void compile(Compiler c) throws CompilerException {
 		Token t = ex.compile(c);
 
 

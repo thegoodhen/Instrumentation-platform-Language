@@ -39,11 +39,12 @@ public class ElseLineToken extends LineToken{
 		this.ilt=ilt;
 	}
 
-	public void prepare(Compiler c) {
+	@Override
+	public void prepare(Compiler c)throws CompilerException {
 		this.jtbct=new JumpTargetByteCodeToken();
 		if(this.ilt==null)
 		{
-			System.err.println("Found ELSE with no preceding IF!");
+			throw new CompilerException("Found ELSE with no preceding IF!");
 		}
 	}
 

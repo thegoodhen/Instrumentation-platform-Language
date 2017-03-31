@@ -36,6 +36,15 @@ public abstract class AbstractJumpByteCodeToken extends ByteCodeToken {
 	}
 
 	/**
+	 * Hotfix for a bug that messes everything up when programs are compiled succesively and the jumpTargetByteCount is not reset, which, among other
+	 * things, causes IF statements to fail.
+	 */
+	public void reset()
+	{
+	    this.jumpTargetByteCount=0;
+	}
+
+	/**
 	 * Checks where the jump target (of type JumpTargetByteCodeToken) is in the code relatively to this jump
 	 * and updates this info in the bytes stored right before the jump
 	 * token, creating it if it doesn't exist yet.

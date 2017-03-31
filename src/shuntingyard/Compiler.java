@@ -74,6 +74,9 @@ public class Compiler {
     }
 
     public int addString(String s) {
+	if (stringMap.get(s) != null) {
+	    return stringMap.get(s);
+	}
 	int stringStart = this.getHeapByteCount();
 	this.stringMap.put(s, stringStart);
 	this.bytesOnHeapCount += s.length() + 1;//adding one to include the "End string" symbol.
@@ -98,12 +101,10 @@ public class Compiler {
 			}
 			functionByteCode.set(i, null);
 		    }
-		    ListIterator li=functionByteCode.listIterator();
-		    while(li.hasNext())
-		    {
-			Object o= li.next();
-			if(o==null)
-			{
+		    ListIterator li = functionByteCode.listIterator();
+		    while (li.hasNext()) {
+			Object o = li.next();
+			if (o == null) {
 			    li.remove();
 			}
 		    }
@@ -123,7 +124,7 @@ public class Compiler {
 	functionMap.put(f.getTokenString(), f);
     }
 
-    public void compile(String s) {
+    public void compile(String s)  throws CompilerException{
 	this.byteCode = new LinkedList<>();
 	this.byteCodeAL = new ArrayList<>();
 	System.out.println("Compilation started...");
@@ -152,6 +153,12 @@ public class Compiler {
 	}
 	//byteCodeAL.add(new NoOperationByteCodeToken());
 	//byteCodeAL.add(new StopByteCodeToken());
+
+	for (Token t : byteCodeAL) {
+	    if (t instanceof AbstractJumpByteCodeToken) {
+		((AbstractJumpByteCodeToken) t).reset();
+	    }
+	}
 
 	boolean everyJumpResolved = false;
 	while (!everyJumpResolved) {
@@ -212,21 +219,21 @@ public class Compiler {
 
     }
 
-    private void firstPass(ArrayList<Token> al) {
+    private void firstPass(ArrayList<Token> al) throws CompilerException {
 	for (Token t : al) {
 	    ((LineToken) t).prepare(this);
 	}
 
     }
 
-    private void secondPass(ArrayList<Token> al) {
+    private void secondPass(ArrayList<Token> al) throws CompilerException{
 
 	for (Token t : al) {
 	    ((LineToken) t).precompile(this);
 	}
     }
 
-    private void thirdPass(ArrayList<Token> al) {
+    private void thirdPass(ArrayList<Token> al) throws CompilerException {
 
 	for (Token t : al) {
 	    ((LineToken) t).compile(this);

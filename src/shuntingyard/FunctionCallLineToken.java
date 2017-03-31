@@ -29,7 +29,7 @@ public class FunctionCallLineToken extends LineToken {
 	public void prepare(Compiler c) {
 	}
 
-	public void precompile(Compiler c) {
+	public void precompile(Compiler c) throws CompilerException{
 
 		Pattern pattern = Pattern.compile(this.getRegex());
 		Matcher matcher = pattern.matcher(this.getTokenString());
@@ -40,7 +40,7 @@ public class FunctionCallLineToken extends LineToken {
 		ex = c.getExpressionParser().createExpression(expressionString);
 	}
 
-	public void compile(Compiler c) {
+	public void compile(Compiler c) throws CompilerException{
 		Token t = ex.compile(c);
 		//c.getByteCode().push(this);
 

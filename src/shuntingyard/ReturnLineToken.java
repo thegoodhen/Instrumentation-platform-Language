@@ -36,7 +36,7 @@ public class ReturnLineToken extends LineToken implements IRunnableToken {
 		this.fdlt = fdlt;
 	}
 
-	public void prepare(Compiler c) {
+	public void prepare(Compiler c) throws CompilerException {
 
 		Pattern pattern = Pattern.compile(this.getRegex());
 		Matcher matcher = pattern.matcher(this.getTokenString());
@@ -45,15 +45,15 @@ public class ReturnLineToken extends LineToken implements IRunnableToken {
 		}
 
 		if (this.fdlt == null) {
-			System.err.println("Error: return statement outside function is invalid.");
+			throw new CompilerException("Error: return statement outside function is invalid.");
 		}
 	}
 
-	public void precompile(Compiler c) {
+	public void precompile(Compiler c) throws CompilerException{
 		ex = c.getExpressionParser().createExpression(expressionString);
 	}
 
-	public void compile(Compiler c) {
+	public void compile(Compiler c) throws CompilerException {
 		Token t = ex.compile(c);
 		if (t instanceof NumberToken) {
 			//TODO: centralize the casting
@@ -61,7 +61,7 @@ public class ReturnLineToken extends LineToken implements IRunnableToken {
 			if (t instanceof IntegerNumberToken) {
 				if (this.fdlt.getFunction().getReturnType() instanceof ByteNumberToken)//expression is int, should return byte
 				{
-					System.err.println("Incompatible return values: actual and formal return types differ, and no implicit conversion exists!");
+					throw new CompilerException("Incompatible return values: actual and formal return types differ, and no implicit conversion exists!");
 				}
 			} else if (t instanceof ByteNumberToken)//expression is a byte, should return int
 			{
@@ -70,7 +70,7 @@ public class ReturnLineToken extends LineToken implements IRunnableToken {
 				}
 			}
 		} else {
-			System.err.println("Invalid return type.");
+			throw new CompilerException("Invalid return type.");
 		}
 		this.extendedArgumentCount = CompilableToken.compileNumber(this.fdlt.getFunction().getArgumentByteCount(), c);
 		c.getByteCode().push(this);

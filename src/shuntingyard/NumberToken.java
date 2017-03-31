@@ -48,6 +48,6 @@ public abstract class NumberToken extends CompilableToken{//TODO: make abstract?
 
 	public abstract int getNumberOfBytes();
 	public abstract boolean isImplicitlyCastableTo(NumberToken nt);
-	public abstract void compileCastTo(NumberToken nt, int stackPos, Compiler c) throws RuntimeException;
+	public abstract int compileCastTo(NumberToken nt, int stackPos, Compiler c) throws RuntimeException;
 	
 }
